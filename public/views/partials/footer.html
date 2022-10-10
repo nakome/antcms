@@ -1,0 +1,19 @@
+<!-- footer -->
+<footer class="container">
+  <p>{$config.copyright}  &copy; {Year}</p>
+</footer><!-- /footer -->
+
+
+<!-- javascript -->
+<script rel="javascript" type="text/javascript" src="{Assets: javascript/prism.js}"></script>
+<script rel="javascript" type="text/javascript" src="{Assets: javascript/antcms.js}"></script>
+
+{If: $page.javascript}
+    <script rel="javascript" type="text/javascript" src="{Site_url}/{$page.javascript}"></script>
+{/If}
+
+<!-- extensiones -->
+{Action: footer}
+</body>
+
+</html>

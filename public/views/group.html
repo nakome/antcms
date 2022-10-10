@@ -1,0 +1,11 @@
+{Partial: head.html}
+{Partial: header.html}
+<!-- Main -->
+<main class="container">
+    {Action: theme_before}
+    {? $current = AntCMS\AntCMS::urlCurrent() ?}
+    {Pages: $current}
+    {Action: theme_after}
+</main>
+<!-- /Main -->
+{Partial: footer.html}

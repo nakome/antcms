@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="{$config.lang}">
+
+<head>
+
+    {Partial: meta/default.html}
+    {Partial: meta/google.html}
+    {Partial: meta/facebook.html}
+    {Partial: meta/twitter.html}
+    {Partial: meta/icons.html}
+
+    {Action: meta}
+
+    <!-- stylesheet -->
+    <link rel="stylesheet" type="text/css" href="{Assets: stylesheets/pico.min.css}" />
+    <link rel="stylesheet" type="text/css" href="{Assets: stylesheets/prism.css}" />
+    <link rel="stylesheet" type="text/css" href="{Assets: stylesheets/antcms.css}" />
+    <link rel="canonical" href="{Site_url}" />
+
+    {If: $page.css}
+        <link rel="stylesheet" type="text/css" href="{Site_url}/{$page.css}" />
+    {/If}
+
+    <!-- url base -->
+    <script>
+        var site_url = "{Site_url}";
+        var site_url_current = "{Site_current}";
+    </script>
+
+    {Action: head}
+
+</head>
+
+
+<body id="top">

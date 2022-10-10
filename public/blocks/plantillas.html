@@ -1,0 +1,176 @@
+<pre><code class="language-php">
+views
+├─ partials
+│  ├─ footer.inc.html
+│  ├─ head.inc.html
+├─ 404.html
+├─ group.html
+└─ <span class="text-danger">index.html</span>
+</code></pre>
+
+<p><strong class="text-muted">Plantilla básica.</strong> <span class="text-primary">index.html</span></p>
+
+<pre><code class="language-php">
+&#123;* head (metatags, css, etc..)  *&#125;
+&#123;Partial: inc/head.inc.html&#125;
+&#123;* action (accion que cargue antes del contenido)*&#125;
+&#123;Action: theme_before&#125;
+&#123;* contenido *&#125;
+&#123;&#36;page.content&#125;
+&#123;* action (accion que cargue despues del contenido)*&#125;
+&#123;Action: theme_after&#125;
+&#123;* footer (scripts, etc..) *&#125;
+&#123;Partial: inc/footer.inc.html&#125;
+</code></pre>
+
+<p><strong class="text-muted">Glosario variables de plantilla.</strong></p>
+
+
+<table>
+    <thead>
+        <tr>
+            <td scope="col">Código</td>
+            <td scope="col">Información</td>
+            </th>
+    </thead>
+
+    <tbody>
+        <tr>
+            <td>&#123;* comentario *&#125;</td>
+            <td>Simple comentario.</td>
+        </tr>
+
+        <tr>
+            <td>&#123;date&#125;</td>
+            <td>Obtener fecha.</td>
+        </tr>
+
+        <tr>
+            <td>&#123;Year&#125;</td>
+            <td>Obtener año.</td>
+        </tr>
+
+        <tr>
+            <td>&#123;Site_url&#125;</td>
+            <td>Obtener url del sitio.</td>
+        </tr>
+
+        <tr>
+            <td>&#123;Site_current&#125;</td>
+            <td>Obtener hash del sitio.</td>
+        </tr>
+
+        <tr>
+            <td>&#123;Pages: nombre&#125;</td>
+            <td>Obtener listado paginas.</td>
+        </tr>
+
+        <tr>
+            <td>&#123;If:&#125;</td>
+            <td>Inicio condicional.</td>
+        </tr>
+
+        <tr>
+            <td>&#123;Else&#125;</td>
+            <td>Condicional else.</td>
+        </tr>
+
+        <tr>
+            <td>&#123;Elseif:&#125;</td>
+            <td>Condicional else if.</td>
+        </tr>
+
+        <tr>
+            <td>&#123;/If&#125;</td>
+            <td>Cierre condicional.</td>
+        </tr>
+
+        <tr>
+            <td>&#123;Segment:&#125;</td>
+            <td>Inicio segmento, (Condicional para segmento de url).</td>
+        </tr>
+        <tr>
+            <td>&#123;/Segment&#125;</td>
+            <td>Fin condicional.</td>
+        </tr>
+        <tr>
+            <td>&#123;Loop: &#36;datos as &#36;key=>&#36;val&#125;</td>
+            <td>Bucle foreach ( &#36;datos as  &#36;key=> &#36;val).</td>
+        </tr>
+        <tr>
+            <td>&#123;Loop: &#36;datos as &#36;dato&#125;</td>
+            <td>Bucle foreach ( &#36;datos as  &#36;dato).</td>
+        </tr>
+        <tr>
+            <td>&#123;/Loop&#125;</td>
+            <td>Fin loop.</td>
+        </tr>
+        <tr>
+            <td>&#123;? &#36;var = 'nueva variable' ?&#125;</td>
+            <td>Crear una nueva variable.</td>
+        </tr>
+        <tr>
+            <td>&#123;?= &#36;var?&#125; o &#123;&#36;var&#125;</td>
+            <td>Llamar nueva variable.</td>
+        </tr>
+        <tr>
+            <td>&#123;&#36;page.title&#125;</td>
+            <td>Obtenemos las variables de la página (title,description, etc..).</td>
+        </tr>
+        <tr>
+            <td>&#123;&#36;config.title&#125;</td>
+            <td>Obtenemos las variables del archivo config (title,description, etc..).</td>
+        </tr>
+        <tr>
+            <td>&#123;'nombre'|capitalize&#125;</td>
+            <td>Capitalizar texto.</td>
+        </tr>
+        <tr>
+            <td>&#123;'nombre'|lower&#125;</td>
+            <td>Descapitalizar.</td>
+        </tr>
+        <tr>
+            <td>&#123;Action: nombre&#125;</td>
+            <td>Llamar acciones.</td>
+        </tr>
+
+        <tr>
+            <td>&#123;Include: archivo&#125;</td>
+            <td>Incluir archivo.</td>
+        </tr>
+
+        <tr>
+            <td>&#123;Block: archivo&#125;</td>
+            <td>Incluir bloque.</td>
+        </tr>
+
+        <tr>
+            <td>&#123;Partial: archivo&#125;</td>
+            <td>Incluir trozo de texto dentro de el directorio la plantilla.</td>
+        </tr>
+
+        <tr>
+            <td>&#123;Assets: archivo&#125;</td>
+            <td>Incluir archivo de la carpeta de assets de la plantilla.</td>
+        </tr>
+
+        <tr>
+            <td>&#123;Iframe: archivo&#125;</td>
+            <td>Incluir iframe.</td>
+        </tr>
+
+        <tr>
+            <td>&#123;Youtube: archivo&#125;</td>
+            <td>Incluir id de video de youtube (Opción de formato 1x1,16x9,21x9).</td>
+        </tr>
+        <tr>
+            <td>&#123;Vimeo: archivo&#125;</td>
+            <td>Incluir id de video de vimeo (Opción de formato 1x1,16x9,21x9).</td>
+        </tr>
+    </tbody>
+</table>
+
+
+<blockquote>
+    <strong>Nota: </strong> puede incluir su propia plantilla en <code>antcms/config/templating.php</code>
+</blockquote>

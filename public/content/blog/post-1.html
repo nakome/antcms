@@ -1,0 +1,152 @@
+Title: Motor plantillas
+Description: Probando el motor de plantillas
+Date: 5/1/2021
+Keywords: cms
+Category: post
+Author: Nakome
+Tags: portfolio,post-1
+Published: true
+Background: #f55
+Color: #fff
+Robots: index,follow
+Attrs: [{"nombre": "lola","edad": 22,"genero": "mujer"}]
+Template: post
+----
+
+<h3>Variables predefinidas</h3>
+
+<pre><code class="language-php">
+&#123;&#36;page.title&#125;       // = {$page.title}
+
+&#123;&#36;page.description&#125; // = {$page.description}
+
+&#123;&#36;page.tags&#125;        // = {$page.tags}
+
+&#123;&#36;page.author&#125;      // = {$page.author}
+
+&#123;&#36;page.image&#125;       // = {$page.image}
+
+&#123;&#36;page.date&#125;        // = {$page.date}
+
+&#123;&#36;page.robots&#125;      // = {$page.robots}
+
+&#123;&#36;page.keywords&#125;    // = {$page.keywords}
+
+&#123;&#36;page.category&#125;    // = {$page.category}
+
+&#123;&#36;page.template&#125;    // = {$page.template}
+
+&#123;&#36;page.published&#125;   // = {$page.published}
+
+&#123;&#36;page.background&#125;  // = {$page.background}
+
+&#123;&#36;page.video&#125;       // = {$page.video}
+
+&#123;&#36;page.color&#125;       // = {$page.color}
+
+&#123;&#36;page.css&#125;         // = {$page.css}
+
+&#123;&#36;page.javascript&#125;  // = {$page.javascript}
+
+&#123;&#36;page.attrs&#125;       // = {?var_dump(json_encode($page.attrs))?}
+
+&#123;&#36;page.json&#125;        // = {$page.json}
+</code></pre>
+
+<h3>Otras</h3>
+<pre><code class="language-php">
+Obtener fecha: &#123;Date&#125;
+Obtener siguiente dia: &#123;NextDay&#125;
+Obtener año: &#123;Year&#125;
+Obtener url del sitio:  &#123;Site_url&#125;
+Obtener hash del sitio:  &#123;Site_current&#125;
+Asignamos nueva variable &#123;? &#36;color = 'azul' ?&#125;
+El color es: &#123;?= &#36;color ?&#125; o &#123;&#36;color&#125;
+&#123;&#36;color|capitalize&#125;
+&#123;&#36;page.title|lower&#125;
+</code></pre>
+
+<b>Obtener fecha: </b> {Date}<br>
+<b>Obtener siguiente dia: </b> {NextDay}<br>
+<b>Obtener año: </b> {Year}<br>
+<b>Obtener url del sitio: </b> {Site_url}<br>
+<b>Obtener hash del sitio: </b> {Site_current}<br>
+{? $color = 'azul' ?}
+<b>El color es: </b> {?= $color ?} o {$color}<br>
+<b>Capitalize: </b> {$color|capitalize}<br>
+<b>Lowercase: </b> {$page.title|lower}
+
+<h3>Condicionales</h3>
+<pre><code class="language-php">
+
+&#123;If: true&#125; 
+    hola true 
+&#123;/If&#125;
+
+&#123;If: &#36;page.image&#125; 
+    La imagen existe
+&#123;Elseif: &#36;page.title&#125; 
+    El titulo existe
+&#123;Else&#125; 
+    Ni la imagen ni el titulo existe
+&#123;/If&#125;
+</code></pre>
+
+{If: true} hola true {/If}
+<br>
+{If: $page.image} 
+La imagen existe 
+{Elseif: $page.title} 
+El titulo existe 
+{Else} 
+Ni la imagen ni el titulo existe
+{/If}
+
+<h3>Loop</h3>
+<pre><code class="language-php">
+&#123;Loop: [1,2,3,4]&#125; 
+    repite esto 4 veces
+&#123;/Loop&#125;
+</code></pre>
+
+{Loop: [1,2,3,4]}
+    repite esto 4 veces<br>
+{/Loop}
+
+<pre><code class="language-php">
+&#123;Loop: &#36;page.attrs as &#36;attrs&#125;
+    Nombre: &#123;&#36;attrs.nombre&#125;
+    Edad: &#123;&#36;attrs.edad&#125;
+    Genero: &#123;&#36;attrs.genero&#125;
+&#123;/Loop&#125;
+</code></pre>
+
+<ul>
+{Loop: $page.attrs as $attrs}
+    <li>Nombre: {$attrs.nombre}</li>
+    <li>Edad: {$attrs.edad}</li>
+    <li>Genero: {$attrs.genero}</li>
+{/Loop}
+</ul>
+
+<h3>Estilos css y javascript en la página</h3>
+<pre><code class="language-php">
+&#123;Style&#125; 
+:root{
+--dark:blue;
+--light:white;
+}
+&#123;/Style&#125;
+// f12 para ver en la consola
+&#123;Script&#125;console.log('titulo: &#123;&#36;page.title&#125;')&#123;/Script&#125;
+</code></pre>
+
+
+{Style}
+:root{
+    --dark:blue;
+    --light:white;
+}
+{/Style}
+
+{Script}console.log('titulo: {$page.title}'){/Script}

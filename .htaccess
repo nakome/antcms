@@ -1,0 +1,43 @@
+<IfModule mod_rewrite.c>
+
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
+    RewriteEngine On
+    #RewriteBase /antcms_minimal
+    RewriteCond %{HTTP:Authorization} ^(.+)$
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+    
+    RedirectMatch 404 /\\.git(/|$)
+    RedirectMatch 404 /\\.env(/|$)
+
+    RewriteCond %{REQUEST_URI} !^/index\.php
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule .* index.php [L]
+
+</IfModule>
+
+<FilesMatch "\.(html?|txt|css|js|php|pl)$">
+    SetOutputFilter DEFLATE
+ </FilesMatch>
+
+#  Prohibido obtener este archivo 
+<FilesMatch "prepros.config|\.(json|db|md|html|yml)|(package|package-lock)\.json$">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order deny,allow
+    Deny from all
+  </IfModule>
+</FilesMatch>
+
+# Establecer 404 al acceder a estas carpetas
+RedirectMatch 404 /(content|tmp|node_modules)(/|$)
+
+## Prevenir la navegación y establecer los recursos por defecto
+Options -Indexes
+DirectoryIndex index.php index.html index.htm
+

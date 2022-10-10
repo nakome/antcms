@@ -1,0 +1,14 @@
+/* TEAM */
+    Web designer: Moncho Varela
+    Twitter: @nakome
+    From:A Coruña, Spain
+
+/* THANKS */
+    Bootstrap: https://getbootstrap.com/
+    Tiny File Manager: https://tinyfilemanager.github.io
+
+/* SITE */
+    Last update:2022/06/04
+    Language: English / Castellano / Galego
+    Doctype:HTML5
+    IDE: Sublime Text,FileZilla
