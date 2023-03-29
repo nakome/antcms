@@ -8,6 +8,7 @@ define('SECURE', true);
 require_once __DIR__ . '/defines.php';
 require_once __DIR__ . '/anttpl/AntTPL.php';
 require_once __DIR__ . '/antcms/AntCMS.php';
+require_once __DIR__ . '/antapi/AntAPI.php';
 
 AntCms\AntCMS::Run()->init(
     __DIR__ . '/config/default.php',

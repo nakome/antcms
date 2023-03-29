@@ -10,6 +10,13 @@ interface IAntTPL
 {
 
     /**
+     * Remove cache 1 day
+     *
+     * @return void
+     */
+    public function removeCacheOneDay():void;
+    
+    /**
      * Callback.
      *
      * @param mixed $variable the var

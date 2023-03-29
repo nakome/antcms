@@ -8,7 +8,7 @@ declare (strict_types = 1);
 defined('SECURE') or die('No tiene acceso al script.');
 
 return [
-    'url' => 'http://localhost/gitlab/antcms',
+    'url' => 'http://localhost/github/antcms',
     // THEME CONFIG
     // ----------------------------
     'google-site-verification' => '',

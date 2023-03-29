@@ -8,7 +8,7 @@ use Traits\Minify as Minify;
 
 defined('SECURE') or die('No tiene acceso al script.');
 
-// Interface 
+// Interface
 require_once __DIR__ . '/IAntTPL.php';
 
 // Traits
@@ -60,6 +60,43 @@ class AntTPL implements IAntTPL
         if (!file_exists($this->tmp)) {
             mkdir($this->tmp);
         }
+
+        $this->removeCacheOneDay();
+    }
+
+    /**
+     * Remove cache 1 day
+     *
+     * @return void
+     */
+    public function removeCacheOneDay(): void
+    {
+        // Set timezone
+        date_default_timezone_set('Europe/Madrid');
+
+        // Cache route
+        $cache_dir = $this->tmp;
+
+        // Get time
+        $now = time();
+
+        // Get date of last clean
+        $json = file_exists($cache_dir . '/cache_info.json') ? json_decode(file_get_contents($cache_dir . '/cache_info.json'), true) : [];
+
+        $last_cleanup = (array_key_exists('date', $json)) ? (int)$json['date'] : 0;
+        // Check date and remove if past 1 day
+        if ($now - $last_cleanup > 86400) {
+            // 86400 seconds = 1 day
+            $files = glob($cache_dir . '/*.html');
+            foreach ($files as $file) {
+                if (is_file($file)) {
+                    unlink($file);
+                }
+            }
+            // Update cache date
+            file_put_contents($cache_dir . '/cache_info.json', json_encode(['date' => $now, 'cleanup' => date("Y-m-d h:m:s", strtotime(date("d-m-Y")))]));
+        }
+
     }
 
     /**
@@ -86,7 +123,7 @@ class AntTPL implements IAntTPL
      *
      * @return mixed
      */
-    public function set(string $name, $value):object
+    public function set(string $name, $value): object
     {
         $this->data[$name] = $value;
 
