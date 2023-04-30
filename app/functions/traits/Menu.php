@@ -30,7 +30,7 @@ trait Menu
                     if (preg_match('/http/i', $k)) {
                         $capitalize = (string) ucfirst($v);
                         $html .= <<<HTML
-                            <li><a href="{$k}">{$capitalize}</a></li>
+                            <a href="{$k}">{$capitalize}</a>
                         HTML;
                     } else {
                         // is array
@@ -50,13 +50,13 @@ trait Menu
                                 $capitalize = (string) ucfirst($v);
                                 $urlBase = trim(AntCMS::urlBase().$k);
                                 $html .= <<<HTML
-                                    <li><a class="active" href="{$urlBase}">{$capitalize}</a></li>
+                                    <a class="active" href="{$urlBase}">{$capitalize}</a>
                                 HTML;
                             } else {
                                 $capitalize = (string) ucfirst($v);
                                 $urlBase = trim(AntCMS::urlBase().$k);
                                 $html .= <<<HTML
-                                    <li><a href="{$urlBase}">{$capitalize}</a></li>
+                                    <a href="{$urlBase}">{$capitalize}</a>
                                 HTML;
                             }
                         }

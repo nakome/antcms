@@ -116,7 +116,7 @@ trait Url
      */
     public static function runSanitize(): void
     {
-        $_GET = array_map('self::urlSanitize', $_GET);
+        $_GET = array_map(['AntCms\AntCMS', 'urlSanitize'], $_GET);
     }
 
 }

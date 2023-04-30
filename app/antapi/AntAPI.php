@@ -183,23 +183,6 @@ if (!function_exists('cors')) {
     }
 }
 
-
-if (!function_exists('errorNotFound'))
-{
-    function errorNotFound()
-    {
-        return jsonOutput([
-            'STATUS' => true,
-            'IP' => getUserIP(),
-            'HTTP_HOST' => $_SERVER['HTTP_HOST'] ?? 'localhost',
-            'REQUEST_METHOD' => $_SERVER['REQUEST_METHOD'] ?? 'GET',
-            'PARAMS' => $_GET,
-            'DATA' => [],
-        ]);
-    }
-}
-
-
 if (array_key_exists('api', $_GET)) {
     // Get config
     AntCMS::$config = include ROOT . '/app/config/default.php';
@@ -235,7 +218,14 @@ if (array_key_exists('api', $_GET)) {
                         'DATA' => is_array($pages) ? map($pages) : [],
                     ]);
                 } else {
-                    errorNotFound();
+                    jsonOutput([
+                        'STATUS' => true,
+                        'IP' => getUserIP(),
+                        'HTTP_HOST' => $_SERVER['HTTP_HOST'] ?? 'localhost',
+                        'REQUEST_METHOD' => $_SERVER['REQUEST_METHOD'] ?? 'GET',
+                        'PARAMS' => $_GET,
+                        'DATA' => [],
+                    ]);
                 }
             } else {
                 $pages = AntCMS::run()->pages('', 'date', 'DESC', ['404']);
@@ -255,7 +245,6 @@ if (array_key_exists('api', $_GET)) {
             if (array_key_exists('name', $_GET)) {
                 $name = $_GET['name'];
                 $file = ROOT . "/public/content/{$name}.html";
-                $fileFolder = ROOT . "/public/content/$name/index.html";
                 if (file_exists($file) && is_file($file)) {
                     jsonOutput([
                         'STATUS' => true,
@@ -268,8 +257,8 @@ if (array_key_exists('api', $_GET)) {
                         ),
                     ]);
                 } elseif (
-                    file_exists($fileFolder) &&
-                    is_file($fileFolder)
+                    file_exists(ROOT . "/public/content/$name/index.html") &&
+                    is_file(ROOT . "/public/content/$name/index.html")
                 ) {
                     jsonOutput(
                         createArray(
@@ -278,10 +267,24 @@ if (array_key_exists('api', $_GET)) {
                         )
                     );
                 } else {
-                    errorNotFound();
+                    jsonOutput([
+                        'STATUS' => true,
+                        'IP' => getUserIP(),
+                        'HTTP_HOST' => $_SERVER['HTTP_HOST'] ?? 'localhost',
+                        'REQUEST_METHOD' => $_SERVER['REQUEST_METHOD'] ?? 'GET',
+                        'PARAMS' => $_GET,
+                        'DATA' => [],
+                    ]);
                 }
             } else {
-                errorNotFound();
+                jsonOutput([
+                    'STATUS' => true,
+                    'IP' => getUserIP(),
+                    'HTTP_HOST' => $_SERVER['HTTP_HOST'] ?? 'localhost',
+                    'REQUEST_METHOD' => $_SERVER['REQUEST_METHOD'] ?? 'GET',
+                    'PARAMS' => $_GET,
+                    'DATA' => [],
+                ]);
             }
             break;
         case 'images':
@@ -300,7 +303,14 @@ if (array_key_exists('api', $_GET)) {
                     ],
                 ]);
             } else {
-                errorNotFound();
+                jsonOutput([
+                    'STATUS' => true,
+                    'IP' => getUserIP(),
+                    'HTTP_HOST' => $_SERVER['HTTP_HOST'] ?? 'localhost',
+                    'REQUEST_METHOD' => $_SERVER['REQUEST_METHOD'] ?? 'GET',
+                    'PARAMS' => $_GET,
+                    'DATA' => [],
+                ]);
             }
             break;
         case 'text':
@@ -319,7 +329,14 @@ if (array_key_exists('api', $_GET)) {
                     ],
                 ]);
             } else {
-                errorNotFound();
+                jsonOutput([
+                    'STATUS' => true,
+                    'IP' => getUserIP(),
+                    'HTTP_HOST' => $_SERVER['HTTP_HOST'] ?? 'localhost',
+                    'REQUEST_METHOD' => $_SERVER['REQUEST_METHOD'] ?? 'GET',
+                    'PARAMS' => $_GET,
+                    'DATA' => [],
+                ]);
             }
             break;
         default:
@@ -342,7 +359,7 @@ if (array_key_exists('api', $_GET)) {
                             <li>Convert image to data-uri</li>
                             <li><strong>Images:</strong> <code>[url]?api=images&url=[image-url]</code></li>
                             <li>Convert text to data-uri</li>
-                            <li><strong>Text:</strong> <code>[url]?api=text&src=[text-url]</code></li>
+                            <li><strong>Images:</strong> <code>[url]?api=text&src=[text-url]</code></li>
                         </ul>
                     </body>
                 </html>

@@ -62,31 +62,4 @@ interface IAntTPL
      * @return string
      */
     public function comment(string $content): string;
-
-    /**
-     * Minify html
-     *
-     * @param string $input
-     *
-     * @return string
-     */
-    public function minify_html(string $input): string;
-
-    /**
-     * Minify css
-     *
-     * @param string $input
-     *
-     * @return string
-     */
-    public function minify_css(string $input): string;
-
-    /**
-     * Minify js
-     *
-     * @param string $input
-     *
-     * @return string
-     */
-    public function minify_js(string $input): string;
 }

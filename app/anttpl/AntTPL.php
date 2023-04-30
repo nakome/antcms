@@ -4,15 +4,10 @@ declare (strict_types = 1);
 
 namespace AntTpl;
 
-use Traits\Minify as Minify;
-
 defined('SECURE') or die('No tiene acceso al script.');
 
 // Interface
 require_once __DIR__ . '/IAntTPL.php';
-
-// Traits
-require_once __DIR__ . '/traits/Minify.php';
 
 /**
  * Ant Template.
@@ -24,8 +19,9 @@ require_once __DIR__ . '/traits/Minify.php';
  */
 class AntTPL implements IAntTPL
 {
-    use Minify;
-
+    public $tags = [];
+    public $tmp = [];
+    public $data = [];
     /**
      * Constructor.
      */
@@ -198,7 +194,7 @@ class AntTPL implements IAntTPL
     private function __run(
         string $file,
         int $counter = 0
-    ): string {
+    ): string{
         $pathInfo = pathinfo($file);
         $tmpFile = $this->tmp . $pathInfo['basename'];
 
@@ -233,9 +229,17 @@ class AntTPL implements IAntTPL
      */
     public function draw(
         string $file
-    ): string {
+    ): string{
         $result = $this->__run($file);
-        return $this->minify_html($result);
+        if (extension_loaded('tidy')) {
+            return tidy_repair_string($result,[
+                'output-xml' => true,
+                'indent' => false,
+                'wrap' => 0
+            ]);
+        }else{
+            return $result;
+        }
     }
 
     /**

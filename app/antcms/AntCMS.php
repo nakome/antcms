@@ -49,7 +49,7 @@ class AntCMS implements IAntCMS
     use \Traits\Parse;
     use \Traits\Load;
     use \Traits\EvalPhp;
-     
+
     // separador de datos y contenido
     private const SEPARATOR = '----';
 
@@ -111,6 +111,16 @@ class AntCMS implements IAntCMS
 
         // charset
         header('Content-Type: text/html; charset=' . static::$config['charset']);
+
+        // Cabeceras de seguridad
+        header("X-Powered-By: Moncho Varela :)");
+        header('Strict-Transport-Security: max-age=31536000');
+        header("Content-Security-Policy: img-src  'self' data:; script-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com 'unsafe-inline'");
+        header('X-Frame-Options: SAMEORIGIN');
+        header('X-Content-Type-Options: nosniff');
+        header('Referrer-Policy: no-referrer-when-downgrade');
+        header('Permissions-Policy: geolocation=(), microphone=(), camera=()');
+
         function_exists('mb_language') and mb_language('uni');
         function_exists('mb_regex_encoding') and mb_regex_encoding(static::$config['charset']);
         function_exists('mb_internal_encoding') and mb_internal_encoding(static::$config['charset']);
@@ -129,28 +139,29 @@ class AntCMS implements IAntCMS
         // meta tag generator
         self::actionAdd('meta', fn() => print('<meta name="generator" content="Creado con AntCMS" />'));
 
-        $page['title']??=static::$config['title'];
-        $page['tags']??=static::$config['keywords'];
-        $page['description']??=static::$config['description'];
-        $page['author']??=static::$config['author'];
-        $page['image']??='';
-        $page['date']??='';
-        $page['robots']??='index,follow';
-        $page['published']??=false;
-        $page['keywords']??=static::$config['keywords'];
-        $page['category']??='';
-        $page['background']??='';
-        $page['video']??='';
-        $page['color']??='';
-        $page['css']??='';
-        $page['javascript']??='';
-        $page['attrs']??='{"title":"Hello World"}';
-        $page['json']??='';
-        // decodificar json
-        $page['attrs'] = json_decode($page['attrs'], true);
+        $pageHeadersArray = [
+            'title' => $page['title'] ?? static::$config['title'],
+            'tags' => $page['tags'] ?? static::$config['keywords'],
+            'description' => $page['description'] ?? static::$config['description'],
+            'author' => $page['author'] ?? static::$config['author'],
+            'image' => $page['image'] ?? '',
+            'date' => $page['date'] ?? '',
+            'robots' => $page['robots'] ?? 'index,follow',
+            'published' => $page['published'] ?? false,
+            'keywords' => $page['keywords'] ?? static::$config['keywords'],
+            'category' => $page['category'] ?? '',
+            'background' => $page['background'] ?? '',
+            'video' => $page['video'] ?? '',
+            'color' => $page['color'] ?? '',
+            'css' => $page['css'] ?? '',
+            'javascript' => $page['javascript'] ?? '',
+            'attrs' => json_decode($page['attrs'] ?? '{"title":"Hello World"}', true),
+            'json' => $page['json'] ?? '',
+            'template' => $page['template'] ?? 'index',
+        ];
 
+        $page[] = $pageHeadersArray;
         $config = self::$config;
-        $page['template']??='index';
 
         // Segmento
         $AntTpl->set('Segment', AntCMS::urlSegment(0));

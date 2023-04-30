@@ -45,6 +45,7 @@ body>.hero>hgroup{margin:0rem;}
 }
 
 .active{color:var(--secondary);}
+nav a{margin:0;}
 nav>ul>li.disabled{opacity:0;visibility:hidden;}
 header>hgroup>h2{font-weight:300;}
 tbody>tr>td:first-child{font-weight:bold;}
