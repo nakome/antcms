@@ -6,11 +6,9 @@ namespace Traits;
 
 use AntCms\AntCMS as AntCMS;
 
-
 defined('SECURE') or die('No tiene acceso al script.');
 
-
-Trait Articles
+trait Articles
 {
 
     /**
@@ -18,9 +16,9 @@ Trait Articles
      *
      * @return ?string
      */
-    private function __emptyPage():string
+    private function __emptyPage(): string
     {
-        return array_key_exists('page', $_GET) ? $_GET['page'] : '0';
+        return $_GET['page'] ?? '0';
     }
 
     /**
@@ -36,9 +34,9 @@ Trait Articles
     private function __listItem(
         string $liclass,
         string $linkclass,
-        ?float $pag,
-        ?string $txt
-    ): string {
+        ? float $pag,
+        mixed $txt
+    ) : string {
         return <<<HTML
             <li class="{$liclass}">
                 <a class="{$linkclass}" href="?page={$pag}">
@@ -57,58 +55,55 @@ Trait Articles
      *
      * @return void
      */
-    private function __tplPag(
-        array $posts,
-        int $limit,
-        int $num
-    ): void {
-        // Total = post / limit - 1
-        $total = ceil(count($posts) / $limit);
+    private function __tplPag(array $posts, int $limit, int $num): void
+    {
+        // Calcular el número total de páginas necesarias
+        $totalPages = ceil(count($posts) / $limit);
+        // Establecer la página actual a mostrar
+        $currentPage = $this->__emptyPage();
+        // Establecer la página anterior y siguiente
+        $prevPage = $currentPage - 1;
+        $nextPage = $currentPage + 1;
 
-        // flechas
-        $leftArrow = $this->leftArrow();
-        $rightArrow = $this->rightArrow();
-
-        // Si esta vacia la primera pagina
-        $p = $this->__emptyPage();
-
-        if (count($posts) > $num) {
-            // Inicializamos paginacion
-            $pagination = '<nav aria-label="Paginacion"><ul class="pagination">';
-            $disabled = (0 == $p) ? "disabled" : "";
-            $pag = $p - 1;
-            $pagination .= $this->__listItem("page-item {$disabled}", "page-link", $pag, $leftArrow);
-
-            if ($p > 0) {
-                $pagination .= $this->__listItem("page-item {$disabled}", "page-link", 0, "Primera");
-            }
-
-            // Lopeamos numeros
-            $s = max(1, $p - 5);
-            for (; $s < min($p + 6, ($total - 1)); $s++) {
-                if ($s == $p) {
-                    $class = ($p == $s) ? "page-item active" : "page-item";
-                    $pagination .= $this->__listItem("page-item active", $class, $s, $s);
-
-                } else {
-                    $class = ($p == $s) ? "active" : "";
-                    $pagination .= $this->__listItem($class, "page-link", $s, $s);
-                }
-            }
-
-            // Ultima
-            if ($p < ($total - 1)) {
-                $t = $total - 1;
-                $pagination .= $this->__listItem("page-item", "page-link", $t, "Ultima");
-            }
-
-            // Flecha derecha
-            $disabled = (($total - 1) == $p) ? "disabled" : "";
-            $pag = $p + 1;
-            $pagination .= $this->__listItem("page-item {$disabled}", "page-link", $pag, $rightArrow);
-            $pagination .= '</ul></nav>';
-            echo $pagination;
+        // Si el número de publicaciones es menor o igual que el número de publicaciones especificado, no hay necesidad de mostrar paginación
+        if (count($posts) <= $num) {
+            return;
         }
+
+        // Iniciar la lista de paginación
+        echo '<nav aria-label="Paginacion"><ul class="pagination">';
+
+        // Mostrar la página anterior
+        echo $this->__listItem("page-item " . ($prevPage < 0 ? "disabled" : ""), "page-link", $prevPage, $this->leftArrow());
+
+        // Mostrar el botón "Primera" si no estamos en la primera página
+        if ($currentPage > 0) {
+            echo $this->__listItem("page-item", "page-link", 0, "Primera");
+        }
+
+        // Calcular qué páginas mostrar en la lista
+        $startPage = max(1, $currentPage - 5);
+        $endPage = min($currentPage + 6, $totalPages);
+
+        // Mostrar cada página en la lista
+        for ($i = $startPage; $i < $endPage; $i++) {
+            // Determinar si esta página es la actual
+            $isActive = $i === $currentPage;
+            // Establecer la clase de la página
+            $class = "page-item" . ($isActive ? " active" : "");
+            // Mostrar la página
+            echo $this->__listItem($class, "page-link", $i, $i);
+        }
+
+        // Mostrar el botón "Última" si no estamos en la última página
+        if ($currentPage < $totalPages - 1) {
+            echo $this->__listItem("page-item", "page-link", $totalPages - 1, "Ultima");
+        }
+
+        // Mostrar la página siguiente
+        echo $this->__listItem("page-item " . ($nextPage >= $totalPages ? "disabled" : ""), "page-link", $nextPage, $this->rightArrow());
+        // Cerrar la lista de paginación
+        echo '</ul></nav>';
     }
 
     /**
@@ -118,83 +113,51 @@ Trait Articles
      *
      * @return void
      */
-    private function __tplPosts(
-        array $items
-    ): void {
-        // inicializamos la plantilla
+    private function __tplPosts(array $items): void
+    {
+        // Inicializar variable vacía para concatenar los artículos
         $html = '';
+
+        // Recorrer cada artículo y construir su HTML
         foreach ($items as $articulo) {
 
-            if (
-                $articulo['published'] !== (string) 'true' &&
-                $articulo['published'] !== (bool) true &&
-                $articulo['published'] !== (int) 1
-            ) {
+            // Si el artículo no está publicado, pasar al siguiente
+            if (!in_array($articulo['published'], ['true', true, 1])) {
                 continue;
             }
 
-            // variables
-            $slug = $articulo['url'];
-            $title = $articulo['title'];
-            $description = AntCMS::short($articulo['description'], 80);
-            $image = $articulo['image'];
-            $date = date('d-m-Y', $articulo['date']);
-            $author = $articulo['author'];
-            $tags = $articulo['tags'];
-            $keywords = $articulo['keywords'];
-            $published = $articulo['published'];
-            $background = $articulo['background'];
-            $color = $articulo['color'];
+            // Obtener la URL base del sitio
             $site_url = AntCMS::urlBase();
-            // separamos tags en array
-            $arrayOfTags = explode(',', $articulo['tags']);
-            // plantilla tags
-            $htmlTemplateTags = '';
-            if (is_array($arrayOfTags)) {
-                foreach ($arrayOfTags as $tag) {
-                    $htmlTemplateTags .= <<<HTML
-                        <a
-                            class="badge bg-primary text-decoration-none me-1"
-                            href="{$site_url}/blog?buscar={$tag}">
-                            {$tag}
-                        </a>
-                    HTML;
-                }
+
+            // Convertir la lista de tags en HTML
+            $tags = explode(',', $articulo['tags']);
+            $tags_html = '';
+            foreach ($tags as $tag) {
+                $tags_html .= "<a class=\"badge bg-primary text-decoration-none me-1\" href=\"{$site_url}/blog?buscar={$tag}\">{$tag}</a>";
             }
-            // plantilla titulo
-            $htmlTemplateTitle = <<<HTML
-                <h2>
-                    <a
-                        class="contrast"
-                        href="{$slug}">
-                        {$title}
-                    </a>
-                </h3>
-            HTML;
-            // plantilla fecha
-            $htmlTemplateDate = <<<HTML
-                <a
-                    href="{$site_url}/blog?buscar={$date}">
-                    <time datetime="{$date}">{$date}</time>
-                </a>
-            HTML;
-            // plantilla articulo
+
+            // Formatear la fecha
+            $date = date('d-m-Y', $articulo['date']);
+
+            // Truncar el texto del artículo a 80 caracteres
+            $txtShort = AntCMS::short($articulo['description'], 80);
+
+            // Concatenar el HTML del artículo a la variable $html
             $html .= <<<HTML
-                <article class="post">
-                    {$htmlTemplateTitle}
-                    <p>{$description}</p>
-                    <footer class="post-footer">
-                        <small>
-                            <strong>Date:&nbsp;</strong>
-                            {$htmlTemplateDate}&nbsp;
-                            <strong> Tags:&nbsp;</strong>
-                            {$htmlTemplateTags}
-                        </small>
-                    </footer>
-                </article>
+            <article class="post">
+                <h2><a class="contrast" href="{$articulo['url']}">{$articulo['title']}</a></h2>
+                <p>{$txtShort}</p>
+                <footer class="post-footer">
+                    <small>
+                        <strong>Date:&nbsp;</strong><a href="{$site_url}/blog?buscar={$date}"><time datetime="{$date}">{$date}</time></a>&nbsp;
+                        <strong>Tags:&nbsp;</strong>{$tags_html}
+                    </small>
+                </footer>
+            </article>
             HTML;
         }
-        $html .= '';
+
+        // Imprimir el HTML generado
         echo $html;
     }
 
@@ -206,29 +169,27 @@ Trait Articles
      *
      * @return void
      */
-    public static function articles(
-        string $name,
-        int $num
-    ): void {
-        // Obtenemos el array de la carpeta
+    public static function articles(string $name, int $num): void
+    {
+        // Obtener las páginas con el nombre especificado, ordenadas por fecha de forma descendente
+        // y excluyendo las páginas con nombre "index" y "404"
         $posts = AntCMS::run()->pages($name, 'date', 'DESC', ['index', '404']);
-        // Limite de paginas
+
+        // Establecer el límite de artículos por página
         $limit = $num;
-        // Inicializamos blogPosts
-        $blogPosts = [];
+
+        // Obtener el número de página actual a través del parámetro "page" en la URL
+        $pgkey = $_GET['page'] ?? 0;
+
+        // Si se encontraron páginas
         if (is_array($posts) && count($posts) > 0) {
-            // Push en blogPosts
-            foreach ($posts as $f) {
-                array_push($blogPosts, $f);
-            }
-            // Divide en fragmentos
-            $files = array_chunk($blogPosts, $limit);
-            // Obtenemos pagina
-            $pgkey = array_key_exists('page', $_GET) ? $_GET['page'] : 0;
-            $items = $files[$pgkey];
-            // plantilla carpeta
-            self::run()->__tplPosts($items);
-            // Paginacion carpeta
+            // Dividir las páginas en bloques de acuerdo al límite de artículos por página
+            $files = array_chunk($posts, $limit);
+
+            // Mostrar los artículos del bloque correspondiente a la página actual
+            self::run()->__tplPosts($files[$pgkey]);
+
+            // Mostrar la paginación
             self::run()->__tplPag($posts, $limit, $num);
         }
     }

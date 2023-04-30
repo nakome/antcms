@@ -18,18 +18,13 @@ trait Contact
      *
      * @return string
      */
-    public static function captcha(
-        string $input = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890',
-        int $strlen = 6
-    ): string {
-        $input_length = strlen($input);
-        $random_string = '';
+    public static function captcha(string $input = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890', int $strlen = 6): string
+    {
+        $result = '';
         for ($i = 0; $i < $strlen; ++$i) {
-            $random_character = $input[mt_rand(0, $input_length - 1)];
-            $random_string .= $random_character;
+            $result .= $input[mt_rand(0, strlen($input) - 1)];
         }
-
-        return $random_string;
+        return $result;
     }
 
     /**
@@ -67,7 +62,7 @@ trait Contact
         $infoOutput = '';
 
         // si se envia el formulario
-        if (array_key_exists('enviarFormulario',$_POST)) {
+        if (array_key_exists('enviarFormulario', $_POST)) {
 
             // post vars
             $subject = trim($_POST['subject']);
