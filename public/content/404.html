@@ -10,13 +10,14 @@ Attrs: []
 Template: 404
 ----
 
-<dialog open>
-    <article>
-        <header>
-            {$page.title} - {$page.description}
-        </header>
-        <p>
-            😒 la página que querías ver no está aquí. <a href="{Site_url}">¿Qué tal ir a la página de inicio?</a>.
-        </p>
-    </article>
-</dialog>
+<section class="py-5 mt-5">
+    <div class="container">
+        <div class="row row-cols-1 d-flex justify-content-center align-items-center">
+            <div class="col-md-10 text-center"><img class="img-fluid w-100" src="{Assets: images/illustrations/404.svg}"></div>
+            <div class="col text-center">
+                <h2 class="display-3 fw-bold mb-4">{$page.title}</h2>
+                <p class="fs-4 text-muted">{$page.description}.</p>
+            </div>
+        </div>
+    </div>
+</section><!-- Start: Footer Multi Column -->

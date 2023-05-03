@@ -1,16 +1,146 @@
 Title: Flat file CMS?
-Description: Que es un sistema de contenidos en formato Flat file.
-Keywords:
-Category: home
+Description: Un sistema de contenido de archivos sin bases de datos.
 Published: true
-Author:
 Date: 02/10/2021
-Image: https://source.unsplash.com/random/?white
-Robots: index,follow
-Attrs: []
 Template: index
 ----
 
-{Block: info}
-{Block: atributos}
-{Block: infofooter}
+
+{Style}
+
+details {
+    background: var(--bs-light);
+    padding: 0;
+    border: 1px solid var(--bs-gray-200);
+    border-radius: 0;
+    -webkit-user-select: none;
+    user-select: none;
+    box-shadow: -6px 6px var(--bs-primary);
+    margin-bottom: 1rem;
+    transition: background .5s,box-shadow 2s;
+    z-index: 2;
+    position: relative
+}
+
+details:focus,details:hover {
+    background: var(--bs-white)!important;
+    border-color: var(--bs-gray-700)!important;
+    color: var(--bs-dark)!important;
+    transition: background .5s,box-shadow 2s;
+}
+
+details summary {
+    width: 100%;
+    padding: .5rem;
+    position: relative;
+    cursor: pointer;
+    list-style: none;
+    font-weight: 600;
+    outline: 0;
+    color: var(--bs-dark)
+}
+
+details summary:after {
+    content: "+";
+    color: var(--bs-dark);
+    position: absolute;
+    font-size: 1.7rem;
+    line-height: 0;
+    top: 1.3rem;
+    right: 1rem;
+    font-weight: 600;
+    transform-origin: center;
+    transition: .2s linear
+}
+
+details p {
+    padding:10px;
+}
+
+{/Style}
+
+<section class="py-2">
+    <div class="container">
+        <div class="row">
+        <div class="col-md-12">
+            <p>
+            Los grandes <strong>CMS</strong> utilizan <code>MySQL</code> o
+            sistemas similares de gestión de bases de datos en un segundo plano.
+            Los sistemas de gestión de bases de datos
+            <strong>(SGBD)</strong> actúan de manera relacional y trabajan con
+            varias tablas para gestionar las consultas, para lo que necesitan un
+            servidor adicional. Los <strong>flat file CMS</strong> no cuentan con
+            elementos de gestión de bases de datos, por lo que es habitual hablar
+            de ellos como <strong>CMS sin bases de datos</strong>. Con ello no hay
+            lugar para los <strong>SGBD</strong> y tampoco para los servidores
+            configurados a tales efectos.
+            </p>
+
+            <p>
+            Estos sistemas pueden o bien erigirse como la solución perfecta o
+            lograr simplicidad donde se necesita complejidad. Las ventajas de los
+            sistemas de gestión de contenidos basados en archivos planos surgen en
+            la mayoría de los casos de su estructura simple:
+            </p>
+
+            <div class="my-5">
+                {Details: Velocidad}
+                En el caso de los proyectos web de poca envergadura, una <strong>SGBD</strong> relacional excede el objetivo y no
+                es realmente necesaria. Mediante la simplificación de la estructura en un sistema flat file se pueden lograr
+                mejores tasas de velocidad.
+                {/Details}
+    
+                {Details: Sencillez}
+                Las grandes bases de datos suelen tener una estructura compleja, compuesta por enlaces sobre enlaces. Cuando no
+                se tiene mucha experiencia, es fácil dar un paso en falso y provocar la caída de la base de datos como si sé
+                tratará de un castillo de naipes. Debido a que los flat file CMS se basan en una estructura sencilla de carpetas,
+                es poco probable cometer un error fatal. Por ello, estos sistemas resultan adecuados para aquellos usuarios que ni
+                están muy familiarizados con las bases de datos ni las necesitan realmente para sus proyectos.
+                {/Details}
+    
+                {Details: Seguridad}
+                Cuanto más sencillo sea un sistema, más fácil es evitar errores, y es que la mayoría de percances ocurre al perder
+                la visión global sobre la estructura, porque es posible que se cuelen errores en la arquitectura y para encontrarlos
+                y solucionarlos haya que invertir un gran esfuerzo. El mantenimiento de una estructura de carpetas sencilla en la
+                que apenas haya ninguna interrelación es mucho más sencillo, lo que también se aplica a la seguridad externa, pues
+                SQL es un blanco muy popular para ataques malintencionados.
+                <strong>Los atacantes utilizan inyecciones SQL</strong> para filtrar comandos en la base de datos y así espiar y
+                manipular información.
+                <strong>Estas brechas de seguridad, sin embargo, no existen en los flat file CMS</strong>.
+                {/Details}
+    
+                {Details: Backup}
+                Crear una copia de seguridad de un flat file CMS no puede ser más sencillo, y es que esto se realiza mediante la
+                función de copiar y pegar. En el caso de los sistemas más complejos, la realización de copias de seguridad es una
+                tarea diaria, pues con estas se guardan datos del sistema, la base de datos y todos los archivos integrados. Por
+                el contrario, una solución flat file es suficiente para copiar todo e integrarlo en otra parte y para almacenar la
+                información <strong>solo se necesita una memoria USB</strong>.
+                {/Details}
+    
+                {Details: Traslado}
+                Cambiar de un servidor a otro en WordPress, Typo3 o Drupal es una tarea muy laboriosa. Lo que se dijo sobre el
+                backup de un flat file CMS también tiene su validez para el traslado de la página web. Tan solo basta con copiar y
+                pegar para que la página esté operativa en otro servidor.
+                {/Details}
+    
+                {Details: Flujo de trabajo}
+                Cuando se utiliza un CMS clásico, el contenido se edita en el backend. Por ello, para realizar cambios en un flat
+                file CMS o crear contenido nuevo puedes recurrir a tu editor preferido.
+                {/Details}
+            </div>
+
+            <p>
+            Los <strong>flat file CMS</strong> son una variante relativamente
+            nueva de los sistemas de gestión de contenidos que se erige como
+            competidora para los CMS tradicionales como
+            <strong>WordPress</strong>, <strong>Typo3</strong> o
+            <strong>Drupal</strong>. Estos sistemas se basan en los llamados flat
+            files o archivos planos, es decir, archivos con una estructura muy
+            sencilla, y plantean tanto ventajas como inconvenientes con respecto a
+            los grandes rivales.
+            </p>
+
+        </div>
+        </div>
+    </div>
+</section>

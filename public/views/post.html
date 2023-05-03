@@ -1,18 +1,17 @@
 {Partial: head.html}
 {Partial: navbar.html}
 {Partial: header.html}
-<!-- Main -->
-<main>
+
+<main class="py-5 mb-5">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
                 {Action: theme_before}
-                {? $current = AntCMS::urlCurrent() ?}
-                {Pages: $current}
+                {$page.content}
                 {Action: theme_after}
             </div>
         </div>
     </div>
 </main>
-<!-- /Main -->
+
 {Partial: footer.html}

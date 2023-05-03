@@ -2,22 +2,379 @@ Title: Documentación
 Description: Como funciona AntCMS.
 Keywords:
 Published: true
-Image: https://source.unsplash.com/random/?white
+Image: images/illustrations/presentation.svg
 Robots: index,follow
 Template: index
 ----
 
-{Style}
-    :root{
-        --dark: #000000;
-        --light: #ffffff;
-        --txt: #282828;
-    }
-{/Style}
+<section class="py-2">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
 
-{Block: info}
-{Block: estructura}
-{Block: acciones}
-{Block: bloques}
-{Block: paginas}
-{Block: plantillas}
+
+        <p>
+            Los grandes <strong>CMS</strong> utilizan <code>MySQL</code> o
+            sistemas similares de gestión de bases de datos en un segundo plano.
+            Los sistemas de gestión de bases de datos
+            <strong>(SGBD)</strong> actúan de manera relacional y trabajan con
+            varias tablas para gestionar las consultas, para lo que necesitan un
+            servidor adicional. Los <strong>flat file CMS</strong> no cuentan con
+            elementos de gestión de bases de datos, por lo que es habitual hablar
+            de ellos como <strong>CMS sin bases de datos</strong>. Con ello no hay
+            lugar para los <strong>SGBD</strong> y tampoco para los servidores
+            configurados a tales efectos.
+        </p>
+  
+        <p>
+            Estos sistemas pueden o bien erigirse como la solución perfecta o
+            lograr simplicidad donde se necesita complejidad. Las ventajas de los
+            sistemas de gestión de contenidos basados en archivos planos surgen en
+            la mayoría de los casos de su estructura simple:
+        </p>
+        
+        
+        <p>Siempre que sea posible, evite modificar los archivos principales de AntCMS. </p>
+
+          {Code: php}
+website
+├─ app
+│  ├─ antcms/
+│  ├─ anttpl/
+│  ├─ functions/ // funciones de la plantilla
+│  ├─ config // configuracion
+│  ├─ defines.php
+│  └─ init.php
+├─ public
+│  ├─ blocks/
+│  │  └─ info.html // bloques de texto 
+│  ├─ content/
+│  │  ├─ 404.html
+│  │  ├─ blog
+│  │  │  └─ index.html
+│  │  └─ index.html
+│  ├─ javasacript/
+│  ├─ icons/
+│  ├─ images/
+│  ├─ stylesheets/
+│  ├─ views/
+│  │  ├─ partials
+│  │  │  ├─ head.html
+│  │  │  ├─ footer.html
+│  │  │  └─ etc..
+│  │  ├─ 404.html
+│  │  ├─ group.html
+│  │  └─ index.html
+├─ index.php
+├─ robots.txt
+├─ humans.txt
+└─ tmp
+          {/Code}
+
+
+        <p>Las Acciones son funciones que podemos integrar en la plantilla para hacerla mas dináminca. Tenemos unas cuantas por defecto que son:</p>
+
+        <ul>
+            <li><strong>head:</strong> usada para incluir los estilos.</li>
+            <li><strong>theme_before:</strong> comentarios tipo discus</li>
+            <li><strong>theme_after:</strong> resolución de formularios</li>
+            <li><strong>footer:</strong> Analytics y javascript</li>
+        </ul>
+
+        <h3>Creando Acciones</h3>
+
+        <p>Vamos a crear una acción que automáticamente genere un enlace al final de cada pagina usando una acción que ya esta en la plantilla que es  <code> AntCms\AntCMS::runAction('theme_after);</code>.</p>
+
+        {Code: php}&lt;?php
+// llamamos a la acción theme_after
+AntCms\AntCMS::actionAdd('theme_after',function(){
+    // y ahora que enseñe esto
+    echo '&lt;a href="'.AntCms\AntCMS::urlBase().'/articulos"&gt;Ver articulos.&lt;/a&gt;';
+});
+        {/Code}
+
+        <p>Y ahora en todas las páginas al final se verá ese enlace, asi de facil.</p>
+
+        <p>Ahora vamos añadir algo más, le vamos a decir que si está en la sección artículos y la página extensiones enseñe el texto y si no no enseñe nada.</p>
+
+        {Code: php}&lt;?php
+// llamamos a la acción theme_after
+AntCms\AntCMS::actionAdd('theme_after',function(){
+    // urlSegment sirve para señalar un segmento del enlace
+    // si pones var_dump(AntCms\AntCMS::urlSegments()) veras todos los segmentos del enlace
+    if(AntCms\AntCMS::urlSegment(0) == 'articulos' && AntCms\AntCMS::urlSegment(1) == 'extensiones'){
+        // y ahora que enseñe esto
+        echo '&lt;a href="'.AntCms\AntCMS::urlBase().'/articulos"&gt;Ver articulos.&lt;/a&gt;';
+    }
+});
+        {/Code}
+
+        <p>Ahora haremos una acción que cambie el fondo solo en esta página, para ello usaremos  el <code>AntCms\AntCMS::actionRun('head')</code> que hay en el archivo <em>head.inc.html</em>.</p>
+
+        {Code: php}&lt;?php
+// llamamos a la accion head
+AntCms\AntCMS::actionAdd('head',function(){
+    // urlSegment sirve para señalar un segmento del enlace
+    if(AntCms\AntCMS::urlSegment(0) == 'articulos' 
+    && AntCms\AntCMS::urlSegment(1) == 'extensiones'){
+    // y ahora incrustamos esto
+    echo '&lt;style rel="stylesheet"&gt;
+        body{
+            background:blue;
+            color:white;
+        }
+        pre,code{
+            background: #0000bb;
+            border-color: #00008e;
+            box-shadow: 0px 3px 6px -2px #02026f;
+            color: white;
+        }
+    &lt;/style&gt;';
+}
+});
+        {/Code}
+
+        <p>
+            Se trata de un simple archivo
+            <span class="text-primary">html</span> situado en la carpeta
+            <strong>/blocks</strong> que podemos usar la etiqueta
+            <code>{Blocks: nombre-del-archivo}</code>.
+        </p>
+
+        <p>Es práctico para usar trozos de código reusables en la plantilla.</p>
+
+        <p><strong class="text-muted">Estructura de la página.</strong></p>
+
+        {Code: yaml}
+Title:
+Description:
+Tags:
+Author:
+Image: // href file
+Date:
+Robots:
+Keywords:
+Category:
+Template: // index,post
+Published: // true, false
+Background: // blue, #f55,rgb(0,0,0)
+Video: // src file
+Color: // blue, #f55,rgb(0,0,0)
+Css: // src file
+Javascript: // src file
+Attrs: // = [1,2,true,'string']
+Json: // = json file
+----
+contenido de la pagina
+        {/Code}
+
+        <div class="table-responsive my-5">
+            <table class="table">
+                <tr>
+                    <th scope="col">Código</th>
+                    <th scope="col">Información</th>
+                </th>
+
+                <tr>
+                    <td>Title</td>
+                    <td>Título de la página.</td>
+                </tr>
+                <tr>
+                    <td>Description</td>
+                    <td>Descripción de la página.</td>
+                </tr>
+                <tr>
+                    <td>Keywords</td>
+                    <td>Palabras clave.</td>
+                </tr>
+                <tr>
+                    <td>Published</td>
+                    <td>Opción si quiere verse o no.</td>
+                </tr>
+                <tr>
+                    <td>Author</td>
+                    <td>Autor de la página.</td>
+                </tr>
+                <tr>
+                    <td>Date</td>
+                    <td>Fecha de la creación.</td>
+                </tr>
+                <tr>
+                    <td>Image</td>
+                    <td>Imagen de la página.</td>
+                </tr>
+                <tr>
+                    <td>Robots</td>
+                    <td>Seguimiento indexado.</td>
+                </tr>
+                <tr>
+                    <td>Attrs</td>
+                    <td>Atributos en formato Json.</td>
+                </tr>
+                <tr>
+                    <td>Template</td>
+                    <td>Nombre de la plantilla.</td>
+                </tr>
+            </table>
+        </div>
+
+        {Code: php}
+views
+├─ partials
+│  ├─ footer.inc.html
+│  ├─ head.inc.html
+├─ 404.html
+├─ group.html
+└─ <span class="text-danger">index.html</span>
+        {/Code}
+
+        <p><strong class="text-muted">Plantilla básica.</strong> <span class="text-primary">index.html</span></p>
+
+        {Code: php}
+&#123;* head (metatags, css, etc..)  *&#125;
+&#123;Partial: inc/head.inc.html&#125;
+&#123;* action (accion que cargue antes del contenido)*&#125;
+&#123;Action: theme_before&#125;
+&#123;* contenido *&#125;
+&#123;&#36;page.content&#125;
+&#123;* action (accion que cargue despues del contenido)*&#125;
+&#123;Action: theme_after&#125;
+&#123;* footer (scripts, etc..) *&#125;
+&#123;Partial: inc/footer.inc.html&#125;
+        {/Code}
+
+        <p><strong class="text-muted">Glosario variables de plantilla.</strong></p>
+
+        <div class="table-responsive my-5">
+            <table class="table">
+                <tr>
+                    <td scope="col">Código</td>
+                    <td scope="col">Información</td>
+                </th>
+                <tr>
+                    <td>&#123;* comentario *&#125;</td>
+                    <td>Simple comentario.</td>
+                </tr>
+                <tr>
+                    <td>&#123;date&#125;</td>
+                    <td>Obtener fecha.</td>
+                </tr>
+                <tr>
+                    <td>&#123;Year&#125;</td>
+                    <td>Obtener año.</td>
+                </tr>
+                <tr>
+                    <td>&#123;Site_url&#125;</td>
+                    <td>Obtener url del sitio.</td>
+                </tr>
+                <tr>
+                    <td>&#123;Site_current&#125;</td>
+                    <td>Obtener hash del sitio.</td>
+                </tr>
+                <tr>
+                    <td>&#123;Pages: nombre&#125;</td>
+                    <td>Obtener listado paginas.</td>
+                </tr>
+                <tr>
+                    <td>&#123;If:&#125;</td>
+                    <td>Inicio condicional.</td>
+                </tr>
+                <tr>
+                    <td>&#123;Else&#125;</td>
+                    <td>Condicional else.</td>
+                </tr>
+                <tr>
+                    <td>&#123;Elseif:&#125;</td>
+                    <td>Condicional else if.</td>
+                </tr>
+                <tr>
+                    <td>&#123;/If&#125;</td>
+                    <td>Cierre condicional.</td>
+                </tr>
+                <tr>
+                    <td>&#123;Segment:&#125;</td>
+                    <td>Inicio segmento, (Condicional para segmento de url).</td>
+                </tr>
+                <tr>
+                    <td>&#123;/Segment&#125;</td>
+                    <td>Fin condicional.</td>
+                </tr>
+                <tr>
+                    <td>&#123;Loop: &#36;datos as &#36;key=>&#36;val&#125;</td>
+                    <td>Bucle foreach ( &#36;datos as  &#36;key=> &#36;val).</td>
+                </tr>
+                <tr>
+                    <td>&#123;Loop: &#36;datos as &#36;dato&#125;</td>
+                    <td>Bucle foreach ( &#36;datos as  &#36;dato).</td>
+                </tr>
+                <tr>
+                    <td>&#123;/Loop&#125;</td>
+                    <td>Fin loop.</td>
+                </tr>
+                <tr>
+                    <td>&#123;? &#36;var = 'nueva variable' ?&#125;</td>
+                    <td>Crear una nueva variable.</td>
+                </tr>
+                <tr>
+                    <td>&#123;?= &#36;var?&#125; o &#123;&#36;var&#125;</td>
+                    <td>Llamar nueva variable.</td>
+                </tr>
+                <tr>
+                    <td>&#123;&#36;page.title&#125;</td>
+                    <td>Obtenemos las variables de la página (title,description, etc..).</td>
+                </tr>
+                <tr>
+                    <td>&#123;&#36;config.title&#125;</td>
+                    <td>Obtenemos las variables del archivo config (title,description, etc..).</td>
+                </tr>
+                <tr>
+                    <td>&#123;'nombre'|capitalize&#125;</td>
+                    <td>Capitalizar texto.</td>
+                </tr>
+                <tr>
+                    <td>&#123;'nombre'|lower&#125;</td>
+                    <td>Descapitalizar.</td>
+                </tr>
+                <tr>
+                    <td>&#123;Action: nombre&#125;</td>
+                    <td>Llamar acciones.</td>
+                </tr>
+                <tr>
+                    <td>&#123;Include: archivo&#125;</td>
+                    <td>Incluir archivo.</td>
+                </tr>
+                <tr>
+                    <td>&#123;Block: archivo&#125;</td>
+                    <td>Incluir bloque.</td>
+                </tr>
+                <tr>
+                    <td>&#123;Partial: archivo&#125;</td>
+                    <td>Incluir trozo de texto dentro de el directorio la plantilla.</td>
+                </tr>
+                <tr>
+                    <td>&#123;Assets: archivo&#125;</td>
+                    <td>Incluir archivo de la carpeta de assets de la plantilla.</td>
+                </tr>
+                <tr>
+                    <td>&#123;Iframe: archivo&#125;</td>
+                    <td>Incluir iframe.</td>
+                </tr>
+                <tr>
+                    <td>&#123;Youtube: archivo&#125;</td>
+                    <td>Incluir id de video de youtube (Opción de formato 1x1,16x9,21x9).</td>
+                </tr>
+                <tr>
+                    <td>&#123;Vimeo: archivo&#125;</td>
+                    <td>Incluir id de video de vimeo (Opción de formato 1x1,16x9,21x9).</td>
+                </tr>
+            </table>
+        </div>
+
+        <blockquote>
+            <strong>Nota: </strong> puede incluir su propia plantilla en <code>antcms/config/templating.php</code>
+        </blockquote>
+
+        </div>
+      </div>
+    </div>
+  </section>

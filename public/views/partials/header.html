@@ -1,33 +1,29 @@
-<div class="hero">
-<!-- nav -->
-<nav class="container-fluid">
-    <ul>
-        <li>
-            <a href="{Site_url}" class="contrast">
-                <strong>{$config.title}</strong>
-            </a>
-        </li>
-    </ul>
-    <button class="btn-menu" aria-label="Boton menu">
-        <svg width="1rem" height="1rem" fill="currentColor" viewBox="0 0 16 16">
-            <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
-        </svg>
-    </button>
-    <ul class="menu">
-        <!-- links -->
-        {Action: navigation}
-        <!-- /links -->
-    </ul>
-</nav><!-- /nav -->
-
-<!-- header -->
-<header class="container">
-    <hgroup>
-        <h1>{$page.title}</h1>
-        <h2>{$page.description}</h2>
-        <nav>{Action: navFolder}</nav>
-    </hgroup>
+<header class="pt-5">
+    <!-- Start: Hero Clean Reverse -->
+    <div class="container pt-4 py-xl-5">
+        <div class="row pt-5">
+            <div class="col-md-6">
+                <div class="d-flex flex-column justify-content-center py-5">
+                    <h1 class="display-4 fw-bolder lh-sm text-primary mb-3">{$page.title}</h1>
+                    <p class="fs-5 text-muted fw-lighter">{$page.description}</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="text-center position-relative">
+                    {If: $page.image}
+                        <img class="img-fluid" src="{Site_url}/public/{$page.image}"/>
+                    {Else}
+                        <img class="img-fluid" src="{Site_url}/public/images/illustrations/teamwork.svg"/>
+                    {/If}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <nav class="float-end">{Action: navFolder}</nav> 
+            </div>
+        </div>
+    </div><!-- End: Hero Clean Reverse -->
 </header>
-<!-- /header -->
 
-</div>
+
