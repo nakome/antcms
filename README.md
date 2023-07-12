@@ -32,12 +32,10 @@ Siempre que sea posible, evite modificar los archivos principales de **AntCMS**.
 
     website
         ├─ app
-        │  ├─ antcms/
-        │  ├─ anttpl/
-        │  ├─ functions/ // funciones de la plantilla
-        │  ├─ config // configuracion
-        │  ├─ defines.php
-        │  └─ init.php
+        │  ├─ AntCMS.php
+        │  ├─ Config.php
+        │  ├─ Functions.php/ // funciones de la plantilla
+        │  └─ Templating.php
         ├─ public
         │  ├─ blocks/
         │  │  └─ info.html // bloques de texto 

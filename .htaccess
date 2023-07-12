@@ -5,10 +5,10 @@
     </IfModule>
 
     RewriteEngine On
-    #RewriteBase /antcms_minimal
+    #RewriteBase /
     RewriteCond %{HTTP:Authorization} ^(.+)$
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
-    
+
     RedirectMatch 404 /\\.git(/|$)
     RedirectMatch 404 /\\.env(/|$)
 
@@ -16,15 +16,16 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule .* index.php [L]
-
 </IfModule>
 
+# Compresion
 <FilesMatch "\.(html?|txt|css|js|php|pl)$">
-    SetOutputFilter DEFLATE
- </FilesMatch>
+  SetOutputFilter DEFLATE
+</FilesMatch>
+
 
 #  Prohibido obtener este archivo 
-<FilesMatch "prepros.config|\.(json|db|md|html|yml)|(package|package-lock)\.json$">
+<FilesMatch "config.php|\.(json|db|md|html|yml)|(package|package-lock)\.json$">
   <IfModule mod_authz_core.c>
     Require all denied
   </IfModule>
@@ -35,7 +36,7 @@
 </FilesMatch>
 
 # Establecer 404 al acceder a estas carpetas
-RedirectMatch 404 /(content|tmp|node_modules)(/|$)
+RedirectMatch 404 /(app|content|tmp|node_modules)(/|$)
 
 ## Prevenir la navegación y establecer los recursos por defecto
 Options -Indexes
