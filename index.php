@@ -1,9 +1,12 @@
-<?php 
+<?php
 
-require_once __DIR__ . '/app/AntCMS.php';
+declare (strict_types = 1);
 
+$dir = str_replace(DIRECTORY_SEPARATOR, '/', getcwd());
 
-AntCms::Run()->init(
-    __DIR__ . '/app/Config.php',
-    __DIR__ . '/app/Templating.php'
-);
+require $dir . '/config/defines.php';
+require $dir . '/src/autoload.php';
+
+$templates = require $dir . '/config/templates.php';
+
+Ant\FrontEnd\FrontEnd::Run()->init($templates);

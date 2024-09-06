@@ -1,0 +1,75 @@
+<h3>Acciones</h3>
+
+<p>Las Acciones son funciones que podemos integrar en la plantilla para hacerla mas dináminca. 
+    Tenemos unas cuantas por defecto que son:</p>
+
+<ul>
+    <li><strong>head:</strong> usada para incluir los estilos.</li>
+    <li><strong>theme_before:</strong> comentarios tipo discus</li>
+    <li><strong>theme_after:</strong> resolución de formularios</li>
+    <li><strong>footer:</strong> Analytics y javascript</li>
+</ul>
+
+<hr class="my-5"/>
+
+<h4>Creando Acciones</h4>
+
+<p>Vamos a crear una acción que automáticamente genere un enlace al final de cada pagina usando una acción que ya esta en la plantilla que es  <code> Ant\FrontEnd\FrontEnd::runAction('theme_after);</code>.</p>
+
+{Code: php}&lt;?php
+// llamamos a la acción theme_after
+Ant\FrontEnd\FrontEnd::actionAdd('theme_after',function(){
+    // y ahora que enseñe esto
+    echo '&lt;a href="'.Ant\FrontEnd\FrontEnd::urlBase().'/articulos"&gt;Ver articulos.&lt;/a&gt;';
+});
+{/Code}
+
+<p>Y ahora en todas las páginas al final se verá ese enlace, asi de facil.</p>
+
+<p>Ahora vamos añadir algo más, le vamos a decir que si está en la sección artículos y la página extensiones enseñe el texto y si no no enseñe nada.</p>
+
+{Code: php}&lt;?php
+// llamamos a la acción theme_after
+Ant\FrontEnd\FrontEnd::actionAdd('theme_after',function(){
+    // urlSegment sirve para señalar un segmento del enlace
+    // si pones var_dump(Ant\FrontEnd\FrontEnd::urlSegments()) veras todos los segmentos del enlace
+    if(Ant\FrontEnd\FrontEnd::urlSegment(0) == 'articulos' && Ant\FrontEnd\FrontEnd::urlSegment(1) == 'extensiones'){
+        // y ahora que enseñe esto
+        echo '&lt;a href="'.Ant\FrontEnd\FrontEnd::urlBase().'/articulos"&gt;Ver articulos.&lt;/a&gt;';
+    }
+});
+{/Code}
+
+<p>Ahora haremos una acción que cambie el fondo solo en esta página, para ello usaremos  el <code>Ant\FrontEnd\FrontEnd::actionRun('head')</code> que hay en el archivo <em>head.inc.html</em>.</p>
+
+{Code: php}&lt;?php
+// llamamos a la accion head
+Ant\FrontEnd\FrontEnd::actionAdd('head',function(){
+    // urlSegment sirve para señalar un segmento del enlace
+    if(Ant\FrontEnd\FrontEnd::urlSegment(0) == 'articulos' 
+        && Ant\FrontEnd\FrontEnd::urlSegment(1) == 'extensiones'){
+        // y ahora incrustamos esto
+        echo '&lt;style rel="stylesheet"&gt;
+        body{
+            background:blue;
+            color:white;
+        }
+        pre,code{
+            background: #0000bb;
+            border-color: #00008e;
+            box-shadow: 0px 3px 6px -2px #02026f;
+            color: white;
+        }
+        &lt;/style&gt;';
+    }
+});
+{/Code}
+
+<p>
+    Se trata de un simple archivo
+    <span class="text-primary">html</span> situado en la carpeta
+    <strong>/blocks</strong> que podemos usar la etiqueta
+    <code>{Blocks: nombre-del-archivo}</code>.
+</p>
+
+<p>Es práctico para usar trozos de código reusables en la plantilla.</p>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{$config.lang}">
+<html lang="{?=HTML_LANG?}">
 
 <head>
 
@@ -22,10 +22,10 @@
     {/If}
 
     <!-- url base -->
-    <script>
+    {Script}
         var site_url = "{Site_url}";
         var site_url_current = "{Site_current}";
-    </script>
+    {/Script}
 
     {Action: head}
 
@@ -33,3 +33,5 @@
 
 
 <body id="top">
+
+    {php} echo 'hola'; {/php}

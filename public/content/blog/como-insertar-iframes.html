@@ -1,0 +1,134 @@
+Title: Un Experimento en JavaScript con Mi Reloj Binario
+Description: ¡Saludos, entusiastas del código! Hoy quiero compartir con ustedes un emocionante experimento que llevé a
+cabo recientemente, donde recreé el funcionamiento de mi reloj binario utilizando JavaScript.
+Date: 05/02/2024
+Category: Desarrollo web
+Author: Moncho Varela
+Tags: HTML, CSS,JavaScript, diseño responsivo
+Image: images/illustrations/contact.svg
+Published: true
+Template: post
+----
+
+<h3>Introducción: La Fascinación Binaria</h3>
+
+<p class="codepen" data-height="500" data-default-tab="html,result" data-slug-hash="QWomwbL"
+	data-pen-title="Binary clock experiment" data-user="nakome"
+	style="height: 500px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;">
+</p>
+<span>Ver el Pen <a href="https://codepen.io/nakome/pen/QWomwbL">
+		Binary clock experiment</a> by Moncho Varela (<a href="https://codepen.io/nakome">@nakome</a>)
+	on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
+<script async src="https://cpwebassets.codepen.io/assets/embed/ei.js"></script>
+
+
+<p>La idea de representar el tiempo en formato binario siempre me ha intrigado. La simplicidad y elegancia de la
+	numeración binaria añaden un toque de misterio a la forma en que percibimos el tiempo. Decidí llevar esta
+	fascinación al siguiente nivel y crear una versión digital de mi reloj binario utilizando JavaScript.</p>
+
+<div class="my-5 border-top border-muted border-1"></div>
+
+<h3 class="mt-5">Pasos Iniciales: Planificación y Diseño</h3>
+
+<p>Antes de sumergirme en el código, pasé algún tiempo planificando la estructura de mi reloj binario. Decidí dividir
+	cada dígito en bloques binarios, con luces encendidas o apagadas representando los bits. Este diseño proporcionaría
+	una representación visual clara y fácil de entender.</p>
+
+
+<div class="my-5 border-top border-muted border-1"></div>
+
+<h3 class="mt-5">Código en Acción: Desarrollando el Reloj Binario en JavaScript</h3>
+
+<p>El corazón de este experimento reside en el código JavaScript que impulsa el reloj binario. Utilicé las funciones de
+	manipulación del DOM para actualizar dinámicamente los valores binarios y las luces del reloj. El código también
+	incluye funciones para obtener la hora actual y dividirla en componentes binarios.</p>
+
+{Code: javascript}
+function actualizarReloj() {
+// Obtiene todos los elementos
+const itemsHora = document.querySelectorAll(`[data-hour]`);
+const itemsHoraTexto = document.querySelectorAll(`[data-hour-txt]`);
+const itemMinuto = document.querySelectorAll(`[data-minutes]`);
+const itemMinutoTexto = document.querySelectorAll(`[data-minutes-txt]`);
+// Obtiene el array de la hora y el minuto
+const horas = [8, 4, 2, 1];
+const minutos = [32, 16, 8, 4, 2, 1];
+// Obtiene la hora actual
+const horaActual = new Date().getHours();
+const minutoActual = new Date().getMinutes();
+
+// Obtener el array de horas filtrado
+const horaBinaria = (horaActual % 12).toString(2).padStart(4, "0");
+const minutoBinario = minutoActual.toString(2).padStart(6, "0");
+
+// Convertir las representaciones binarias a arrays de números
+const horasFiltradas = horaBinaria
+.split("")
+.map((bit, index) => (bit === "1" ? horas[index] : 0))
+.filter(Boolean);
+const minutosFiltrados = minutoBinario
+.split("")
+.map((bit, index) => (bit === "1" ? minutos[index] : 0))
+.filter(Boolean);
+
+// Construir la cadena para mostrar la hora actual en formato de 12 horas con ceros en el minuto si es necesario
+const hora12Formato = horaActual % 12 || 12;
+const horaActualStr = hora12Formato.toString().padStart(2, "0");
+const minutoActualStr = minutoActual.toString().padStart(2, "0");
+const amPm = horaActual < 12 ? "AM" : "PM" ; // Mostrar la hora actual en el div con id "reloj-real" const
+	relojReal=document.getElementById("reloj-real"); relojReal.textContent=`${horaActualStr}:${minutoActualStr}
+	${amPm}`; // Borrar clases borrarClases(itemsHora); borrarClases(itemsHoraTexto); borrarClases(itemMinuto);
+	borrarClases(itemMinutoTexto); // Activar los elementos correspondientes horasFiltradas.forEach((item)=>
+	activar(`[data-hour="${item}"]`, `[data-hour-txt="${item}"]`)
+	);
+	minutosFiltrados.forEach((item) =>
+	activar(`[data-minutes="${item}"]`, `[data-minutes-txt="${item}"]`)
+	);
+	// Actualizar reloj constantemente
+	requestAnimationFrame(actualizarReloj);
+	}
+
+	// Borrar clases de los elementos
+	// Remove classes from elements
+	function borrarClases(elements) {
+	elements.forEach((element) => {
+	if (element) {
+	element.classList.remove("active");
+	}
+	});
+	}
+
+	// Activar los elementos correspondientes
+	function activar(hora, texto) {
+	const activarElemento = (elemento) => {
+	const item = document.querySelector(elemento);
+	if (item) item.classList.add("active");
+	};
+
+	activarElemento(hora);
+	activarElemento(texto);
+	}
+
+	// Actualiza el reloj al cargar la página
+	actualizarReloj();
+	{/Code}
+
+	<h3 class="mt-5">Interactividad y Experiencia del Usuario</h3>
+
+	<p>Para mejorar la experiencia del usuario, implementé características interactivas. Añadí la capacidad de cambiar
+		entre formatos de 12 y 24 horas, así como un botón de pausa para detener y reanudar el reloj binario. Estas
+		características adicionales brindan versatilidad y hacen que la experiencia sea más personalizada.</p>
+
+	<div class="my-5 border-top border-muted border-1"></div>
+
+
+	<h3 class="mt-5">Conclusiones y Reflexiones</h3>
+
+	<p>Este experimento no solo fue una oportunidad para sumergirme en el mundo de la programación binaria, sino también
+		para explorar cómo la representación visual del tiempo puede ser tan emocionante como funcional. La versatilidad
+		de JavaScript y su capacidad para interactuar con el DOM facilitaron la creación de esta experiencia única.</p>
+
+	<p>Este proyecto me ha dejado con una mayor apreciación por la belleza de la programación y la creatividad que se
+		puede expresar a través de ella. ¡Espero que esta exploración del reloj binario haya sido tan intrigante para
+		ustedes como lo fue para mí!</p>

@@ -1,0 +1,28 @@
+<h3>Plantillas en AntCMS</h3>
+<p>Las plantillas en AntCMS se alojan en la carpeta <strong>views</strong>.</p>
+<p>Esctructura de la carpeta <strong>views</strong>.</p>
+
+{Code: php}
+views
+├─ partials
+│  ├─ footer.inc.html
+│  ├─ head.inc.html
+├─ 404.html
+├─ group.html
+└─ <span class="text-danger">index.html</span>
+{/Code}
+
+<p><strong class="text-muted">Plantilla básica.</strong> <span class="text-primary">index.html</span></p>
+
+{Code: php}
+&#123;* head (metatags, css, etc..)  *&#125;
+&#123;Partial: inc/head.inc.html&#125;
+&#123;* action (accion que cargue antes del contenido)*&#125;
+&#123;Action: theme_before&#125;
+&#123;* contenido *&#125;
+&#123;&#36;page.content&#125;
+&#123;* action (accion que cargue despues del contenido)*&#125;
+&#123;Action: theme_after&#125;
+&#123;* footer (scripts, etc..) *&#125;
+&#123;Partial: inc/footer.inc.html&#125;
+{/Code}

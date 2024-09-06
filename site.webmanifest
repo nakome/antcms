@@ -1,0 +1,26 @@
+{
+    "short_name": "asubio",
+    "name": "Clínica Asubío",
+    "icons": [
+        {
+            "src": "public/images/logos/apple-icon-180x180.webp",
+            "type": "image/png",
+            "sizes": "180x180"
+        },
+        {
+            "src": "public/images/logos/apple-icon-180x180.webp",
+            "type": "image/png",
+            "sizes": "180x180"
+        },
+        {
+            "src": "public/images/full/bandolera.webp",
+            "type": "image/webp",
+            "sizes": "512x512"
+        }
+    ],
+    "start_url": "/",
+    "background_color": "#fff3f8",
+    "theme_color": "#e3387c",
+    "display": "fullscreen",
+    "orientation": "portrait"
+}

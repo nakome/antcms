@@ -1,0 +1,46 @@
+{Partial: head.html}
+{Partial: navbar.html}
+{Partial: header.html}
+<!-- Main -->
+<main>
+    <div class="container">
+        {Action: theme_before}
+
+        {? $limit = $_GET['page'] ?? '0'?}
+        {? $current = Vendor\Url\Url::current() ?}
+        {? $posts = Vendor\FrontEnd\FrontEnd::run()->pages($current, 'date', 'DESC', ['index', '404'],PAGINATION_LIMIT) ?}
+
+        {Loop: $posts as $post}
+            {? $date = date('d-m-Y', $post.date) ?}
+            <div class="row my-3">
+                <div class="col-md-4">
+                    {If: $post.image}
+                        <img src="{Site_url}/public/{$post.image}" alt="{$post.title}" class="img-fluid mb-3"/>
+                    {Else}
+                        <div class="bg-light mb-3" style="height:12rem"></div>
+                    {/If}
+                </div>
+                <div class="col-md-8">
+                    <h3 class="text-primary">{$post.title}</h3>
+                    <p class="text-muted">{$post.description}</p>
+                    <p>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar3 me-2" viewBox="0 0 16 16">
+                            <path d="M14 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2M1 3.857C1 3.384 1.448 3 2 3h12c.552 0 1 .384 1 .857v10.286c0 .473-.448.857-1 .857H2c-.552 0-1-.384-1-.857z"/>
+                            <path d="M6.5 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
+                        </svg>
+                        <a class="text-decoration-none link-info me-1" href="{Site_url}/blog?buscar={$date}">
+                            <time datetime="{$date}">{$post.date|format_time}</time>
+                        </a>
+                    </p>
+                    <p><a href="{$post.url}">Leer más</a></p>
+                </div>
+            </div>
+        {/Loop}
+
+        {If: is_array($posts) && count($posts) > 0}
+            {? Functions::pagination($posts,PAGINATION_LIMIT,$limit) ?}
+        {/If}
+    </div>
+</main>
+<!-- /Main -->
+{Partial: footer.html}

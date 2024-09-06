@@ -4,14 +4,126 @@
 <!-- Main -->
 <main>
     <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                {Action: theme_before}
-                {? $current = AntCMS::urlCurrent() ?}
-                {Pages: $current}
-                {Action: theme_after}
+        {Action: theme_before}
+
+        {? $current = Vendor\Url\Url::current() ?}
+        {? $pages = Ant\FrontEnd\FrontEnd::run()->pages($current, 'date', 'DESC', ['index', '404']) ?}
+        {? $files = array_chunk($pages, PAGINATION_LIMIT) ?}
+        {? $pgkey = $_GET['page'] ?? 0 ?}
+
+        {Loop: $files[$pgkey] as $page}
+
+        {? $date = date('d-m-Y',$page.date) ?}
+
+        <article class="row my-3">
+            <div class="col-md-4">
+                {If: $page.image}
+                <img src="{Site_url}/public/{$page.image}" alt="{$page.title}" class="img-fluid" />
+                {Else}
+                <div class="bg-light mb-3" style="height:12rem"></div>
+                {/If}
             </div>
-        </div>
+            <div class="col-md-8">
+                <a href="{$page.url}">
+                    <h2 class="fs-3 fw-bold text-primary mb-2 lh-base">{$page.title}</h2>
+                    <h3 class="fs-5 fw-lighter text-muted mb-2 lh-base">{$page.description}</h3>
+                </a>
+                <p class="post-meta">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-calendar3 me-2" viewBox="0 0 16 16">
+                        <path
+                            d="M14 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2M1 3.857C1 3.384 1.448 3 2 3h12c.552 0 1 .384 1 .857v10.286c0 .473-.448.857-1 .857H2c-.552 0-1-.384-1-.857z" />
+                        <path
+                            d="M6.5 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2" />
+                    </svg>
+                    <a class="text-decoration-none link-info me-1" href="{Site_url}/blog?buscar={$date}">
+                        <time datetime="{$date}">{$page.date|format_time}</time>
+                    </a>
+                    <strong class="text-muted me-1">Etiquetas:</strong>
+                    {? $tags = explode(',', $page.tags) ?}
+                    {Loop: $tags as $tag}
+                    <a class="text-decoration-none link-info" href="{Site_url}/blog?buscar={$tag}">{$tag}</a>
+                    {/Loop}
+                </p>
+                <p><a href="{$page.url}">Leer mas</a></p>
+            </div>
+        </article>
+
+        {/Loop}
+
+        {? $totalPages = ceil(count($pages) / PAGINATION_LIMIT) ?}
+        {? $currentPage = $_GET['page'] ?? 0 ?}
+        {? $prevPage = $currentPage - 1 ?}
+        {? $nextPage = $currentPage + 1 ?}
+        {? $startPage = max(1, $currentPage - 5) ?}
+        {? $endPage = min($currentPage + 6, $totalPages) ?}
+
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+
+                <!-- Botón de "Anterior" -->
+                {If: $prevPage >= 0}
+                <li class="page-item">
+                    <a class="page-link" href="{Site_url}/blog?page={$prevPage}" tabindex="-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z"/>
+                        </svg>
+                    </a>
+                </li>
+                {Else}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z"/>
+                        </svg>
+                    </a>
+                </li>
+                {/If}
+
+                <!-- Primer página -->
+                {If: $currentPage > 0}
+                <li class="page-item">
+                    <a class="page-link" href="{Site_url}/blog?page=0">Primera</a>
+                </li>
+                {/If}
+
+                <!-- Números de páginas dinámicas -->
+                {Loop: range($startPage, $endPage - 1) as $i}
+                {? $isActive = $i === $currentPage ?}
+                <li class="page-item {?= $isActive ? 'active' : '' ?}">
+                    <a class="page-link" href="{Site_url}/blog?page={$i}">{$i}</a>
+                </li>
+                {/Loop}
+
+                <!-- Última página -->
+                {If: $currentPage < $totalPages - 1}
+                <li class="page-item">
+                    <a class="page-link" href="{Site_url}/blog?page={?= $totalPages - 1 ?}">Última</a>
+                </li>
+                {/If}
+
+                <!-- Botón de "Siguiente" -->
+                {If: $nextPage < $totalPages}
+                <li class="page-item">
+                    <a class="page-link" href="{Site_url}/blog?page={$nextPage}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/>
+                        </svg>
+                    </a>
+                </li>
+                {Else}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/>
+                        </svg>
+                    </a>
+                </li>
+                {/If}
+            </ul>
+        </nav>
+
+        {Action: theme_after}
     </div>
 </main>
 <!-- /Main -->
