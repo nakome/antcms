@@ -173,8 +173,9 @@ final class FrontEnd
         static::$templating = $templatingConfiguration;
 
         // Comprobamos si existe el archivo functions
-        if (file_exists(ROOT . '/config/functions.php') && is_file(ROOT . '/config/functions.php')) {
-            require ROOT . '/config/functions.php';
+        $functions = ROOT . '/config/functions.php';
+        if (file_exists($functions) && is_file($functions)) {
+            require $functions;
         }
 
         // Sanitizamos $_GET
